@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Eval xmlns="http://schema.primaresearch.org/PAGE/eval/layout/2013-07-15" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.primaresearch.org/PAGE/eval/layout/2013-07-15 http://schema.primaresearch.org/PAGE/eval/layout/2013-07-15/layouteval.xsd">
+	<Metadata>
+	<Creator></Creator>
+	<Created>2010-11-16T10:40:51</Created>
+	<LastChange>2014-02-11T15:37:24</LastChange></Metadata>
+	<Profile>
+	<GeneralSettings>
+	<Parameter type="2" sortIndex="1" version="0" name="Use foreground area" readOnly="false" isSet="true" visible="true" value="true" id="2001">
+	<Description>Use the number of foreground pixels instead of the area defined by polygons.</Description></Parameter>
+	<Parameter type="1" sortIndex="2" version="0" name="Rd Orientation Threshold" readOnly="true" isSet="true" visible="true" value="10.00000" id="2002" min="0.00000" max="90.00000" step="1.00000">
+	<Description>Threshold until when a difference of two reading orientation angles is allowable.</Description></Parameter>
+	<Parameter type="4" sortIndex="3" version="0" name="Def Rd Dir" readOnly="false" isSet="true" visible="true" value="left-to-right" id="2003" textType="2">
+	<Description>Default Reading Direction</Description>
+	<ValidValues>
+	<Value value="bottom-to-top"/>
+	<Value value="left-to-right"/>
+	<Value value="right-to-left"/>
+	<Value value="top-to-bottom"/></ValidValues></Parameter>
+	<Parameter type="4" sortIndex="4" version="0" name="Rd Dir Usage" readOnly="false" isSet="true" visible="true" value="As specified in ground-truth" id="2004" textType="2">
+	<Description>Reading Direction Usage</Description>
+	<ValidValues>
+	<Value value="Always use default value"/>
+	<Value value="As specified in ground-truth"/>
+	<Value value="Use default if not set in ground-truth"/></ValidValues></Parameter>
+	<Parameter type="1" sortIndex="5" version="0" name="Def Rd Orientation" readOnly="false" isSet="true" visible="true" value="0.00000" id="2005" min="-179.00000" max="180.00000" step="1.00000">
+	<Description>Default reading orientation</Description></Parameter>
+	<Parameter type="4" sortIndex="6" version="0" name="Rd Orient. Usage" readOnly="false" isSet="true" visible="true" value="As specified in ground-truth" id="2006" textType="2">
+	<Description>Reading Orientation Usage</Description>
+	<ValidValues>
+	<Value value="Always use default value"/>
+	<Value value="As specified in ground-truth"/>
+	<Value value="Use default if not set in ground-truth"/></ValidValues></Parameter>
+	<Parameter type="4" sortIndex="7" version="0" name="Default text type" readOnly="false" isSet="true" visible="true" value="paragraph" id="2007" textType="2">
+	<Description>Default type for text regions of unspecified type</Description>
+	<ValidValues>
+	<Value value="&lt;undefined&gt;"/>
+	<Value value="TOC-entry"/>
+	<Value value="caption"/>
+	<Value value="catch-word"/>
+	<Value value="credit"/>
+	<Value value="drop-capital"/>
+	<Value value="floating"/>
+	<Value value="footer"/>
+	<Value value="footnote"/>
+	<Value value="footnote-continued"/>
+	<Value value="header"/>
+	<Value value="heading"/>
+	<Value value="marginalia"/>
+	<Value value="page-number"/>
+	<Value value="paragraph"/>
+	<Value value="signature-mark"/></ValidValues></Parameter></GeneralSettings>
+	<ErrorTypeWeights>
+	<ErrorTypeWeight name="Split" weight="1.00000" allowableWeight="1.00000" useAllowable="true" enableAllowable="true" type="split"/>
+	<ErrorTypeWeight name="Merge" weight="1.50000" allowableWeight="1.50000" useAllowable="true" enableAllowable="true" type="merge"/>
+	<ErrorTypeWeight name="Miss" weight="2.00000" enableAllowable="false" type="miss"/>
+	<ErrorTypeWeight name="Partial Miss" weight="2.00000" enableAllowable="false" type="partial-miss"/>
+	<ErrorTypeWeight name="Misclassification" weight="2.00000" enableAllowable="false" type="misclassification"/>
+	<ErrorTypeWeight name="False Detection" weight="1.00000" enableAllowable="false" type="false-detection"/></ErrorTypeWeights>
+	<RegionTypeWeights>
+	<RegionTypeWeight name="Text" weight="1.00000" enableAllowable="false" type="text"/>
+	<RegionTypeWeight name="Image" weight="0.00000" enableAllowable="false" type="image"/>
+	<RegionTypeWeight name="Graphic" weight="0.00000" enableAllowable="false" type="graphic"/>
+	<RegionTypeWeight name="Line Drawing" weight="0.00000" enableAllowable="false" type="line-drawing"/>
+	<RegionTypeWeight name="Chart" weight="0.00000" enableAllowable="false" type="chart"/>
+	<RegionTypeWeight name="Separator" weight="0.00000" enableAllowable="false" type="separator"/>
+	<RegionTypeWeight name="Table" weight="0.00000" enableAllowable="false" type="table"/>
+	<RegionTypeWeight name="Maths" weight="0.00000" enableAllowable="false" type="maths"/>
+	<RegionTypeWeight name="Noise" weight="0.00000" enableAllowable="false" type="noise"/>
+	<RegionTypeWeight name="Unknown" weight="0.00000" enableAllowable="false" type="unknown"/>
+	<RegionTypeWeight name="Chem" weight="0.00000" enableAllowable="false" type="chem"/>
+	<RegionTypeWeight name="Music" weight="0.00000" enableAllowable="false" type="music"/>
+	<RegionTypeWeight name="Advert" weight="0.00000" enableAllowable="false" type="advert"/></RegionTypeWeights>
+	<ReadingOrderWeight name="Reading Order" weight="0.00000" enableAllowable="false">
+	<Description>Influence of the reading order error</Description></ReadingOrderWeight>
+	<TextLineWeights>
+	<ErrorTypeWeight name="Merge" weight="1.50000" enableAllowable="false" type="merge"/>
+	<ErrorTypeWeight name="Split" weight="1.00000" enableAllowable="false" type="split"/>
+	<ErrorTypeWeight name="Miss" weight="2.00000" enableAllowable="false" type="miss"/>
+	<ErrorTypeWeight name="Partial Miss" weight="2.00000" enableAllowable="false" type="partial-miss"/>
+	<ErrorTypeWeight name="False Detection" weight="1.00000" enableAllowable="false" type="false-detection"/></TextLineWeights>
+	<WordWeights>
+	<ErrorTypeWeight name="Merge" weight="1.50000" enableAllowable="false" type="merge"/>
+	<ErrorTypeWeight name="Split" weight="1.00000" enableAllowable="false" type="split"/>
+	<ErrorTypeWeight name="Miss" weight="2.00000" enableAllowable="false" type="miss"/>
+	<ErrorTypeWeight name="Partial Miss" weight="2.00000" enableAllowable="false" type="partial-miss"/>
+	<ErrorTypeWeight name="False Detection" weight="1.00000" enableAllowable="false" type="false-detection"/></WordWeights>
+	<GlyphWeights>
+	<ErrorTypeWeight name="Merge" weight="1.50000" enableAllowable="false" type="merge"/>
+	<ErrorTypeWeight name="Split" weight="1.00000" enableAllowable="false" type="split"/>
+	<ErrorTypeWeight name="Miss" weight="2.00000" enableAllowable="false" type="miss"/>
+	<ErrorTypeWeight name="Partial Miss" weight="2.00000" enableAllowable="false" type="partial-miss"/>
+	<ErrorTypeWeight name="False Detection" weight="1.00000" enableAllowable="false" type="false-detection"/></GlyphWeights>
+	<BorderWeights>
+	<IncludedBackgroundWeight name="Included Background" weight="1.00000" enableAllowable="false">
+	<Description>By border included background area</Description></IncludedBackgroundWeight>
+	<ExcludedForegroundWeight name="Excluded Foreground" weight="1.00000" enableAllowable="false">
+	<Description>By border excluded foreground area</Description></ExcludedForegroundWeight>
+	<MissingRegionAreaWeights>
+	<RegionTypeWeight name="Text" weight="1.00000" enableAllowable="false" type="text"/>
+	<RegionTypeWeight name="Image" weight="1.00000" enableAllowable="false" type="image"/>
+	<RegionTypeWeight name="Graphic" weight="1.00000" enableAllowable="false" type="graphic"/>
+	<RegionTypeWeight name="Line Drawing" weight="1.00000" enableAllowable="false" type="line-drawing"/>
+	<RegionTypeWeight name="Chart" weight="1.00000" enableAllowable="false" type="chart"/>
+	<RegionTypeWeight name="Separator" weight="1.00000" enableAllowable="false" type="separator"/>
+	<RegionTypeWeight name="Table" weight="1.00000" enableAllowable="false" type="table"/>
+	<RegionTypeWeight name="Maths" weight="1.00000" enableAllowable="false" type="maths"/>
+	<RegionTypeWeight name="Noise" weight="1.00000" enableAllowable="false" type="noise"/>
+	<RegionTypeWeight name="Unknown" weight="1.00000" enableAllowable="false" type="unknown"/>
+	<RegionTypeWeight name="Chem" weight="1.00000" enableAllowable="false" type="chem"/>
+	<RegionTypeWeight name="Music" weight="1.00000" enableAllowable="false" type="music"/>
+	<RegionTypeWeight name="Advert" weight="1.00000" enableAllowable="false" type="advert"/></MissingRegionAreaWeights></BorderWeights></Profile></Eval>

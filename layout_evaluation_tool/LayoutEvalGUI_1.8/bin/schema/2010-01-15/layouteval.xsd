@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://schema.primaresearch.org/PAGE/eval/layout/2010-01-15"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ev="http://schema.primaresearch.org/PAGE/eval/layout/2010-01-15">
+
+    <element name="Eval" type="ev:EvalType">
+		<annotation>
+			<documentation>Evaluation - Metadata, Profile and Results</documentation>
+		</annotation></element>
+	<complexType name="EvalType">
+		<sequence>
+			<element name="Metadata" type="ev:MetadataType">
+				<annotation>
+					<documentation>Creation time, last change, creator, comments</documentation>
+				</annotation></element>
+			<element name="Profile" type="ev:ProfileType" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>Weights and general settings</documentation>
+				</annotation></element>
+			<element name="EvalData" type="ev:EvalDataType" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>Raw data and result metrics</documentation>
+				</annotation></element>
+		</sequence>
+		<attribute name="evalId" type="ID" use="optional"></attribute>
+	</complexType>
+	<complexType name="MetadataType">
+		<sequence>
+			<element name="Creator" type="string"></element>
+			<element name="Created" type="dateTime">
+				<annotation>
+					<documentation>&quot;%Y-%m-%dT%H:%M:%S&quot;</documentation></annotation></element>
+			<element name="LastChange" type="dateTime">
+				<annotation>
+					<documentation>&quot;%Y-%m-%dT%H:%M:%S&quot;</documentation></annotation></element>
+			<element name="Comments" type="string" minOccurs="0"
+				maxOccurs="1"></element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="ProfileType">
+		<sequence>
+			<element name="GeneralSettings" type="ev:ParametersType">
+				<annotation>
+					<documentation>'Use pixel area', thresholds, ...</documentation>
+				</annotation></element>
+			<element name="ErrorTypeWeights" type="ev:ErrorTypeWeightsType">
+				<annotation>
+					<documentation>weights per error type (merge, split, ...)</documentation>
+				</annotation></element>
+			<element name="RegionTypeWeights" type="ev:RegionTypeWeightsType">
+				<annotation>
+					<documentation>weights per region type (text, image, ...)</documentation>
+				</annotation></element>
+			<element name="ReadingOrderWeight" type="ev:ReadingOrderWeightType">
+				<annotation>
+					<documentation>influence of the reading order to the overall success rates</documentation>
+				</annotation></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ErrorTypeWeightsType">
+		<sequence>
+			<element name="ErrorTypeWeight" type="ev:ErrorTypeWeightType" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>weight for an error type (merge, split, ...)</documentation>
+				</annotation></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="RegionTypeWeightsType">
+		<sequence>
+			<element name="RegionTypeWeight" type="ev:RegionTypeWeightType" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>weight for a region type (text, image, ...)</documentation>
+				</annotation></element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="WeightType">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="1"></element>
+		</sequence>
+		<attribute name="name" type="string" use="optional"></attribute>
+		<attribute name="weight" type="float" use="optional"></attribute>
+		<attribute name="allowableWeight" type="float" use="optional">
+			<annotation>
+				<documentation>weight for allowable split or merge</documentation>
+			</annotation></attribute>
+		<attribute name="enableAllowable" type="boolean" use="required"></attribute>
+		<attribute name="useAllowable" type="boolean" use="optional"></attribute>
+	</complexType>
+
+	<complexType name="ReadingOrderWeightType">
+		<complexContent>
+			<extension base="ev:WeightType">
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ErrorTypeWeightType">
+		<complexContent>
+			<extension base="ev:WeightType">
+				<sequence>
+					<element name="RegionTypeWeight" type="ev:RegionTypeWeightType" minOccurs="1" maxOccurs="unbounded">
+						<annotation>
+							<documentation>weights per region type (text, image, ...)</documentation>
+						</annotation></element>
+				</sequence>
+				<attribute name="type" type="int" use="required">
+					<annotation>
+						<documentation>1=split; 2=merge; 3=miss; 4=partial miss; 5=misclassification; 6=false detection</documentation>
+					</annotation></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="RegionTypeWeightType">
+		<complexContent>
+			<extension base="ev:WeightType">
+				<sequence>
+					<element name="RegionTypeWeight" type="ev:RegionTypeWeightType" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>weights per region type (text, image, ...)</documentation></annotation></element>
+					<element name="SubTypeWeight" type="ev:SubTypeWeightType" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>Weight for subtype (text regions only: paragraph, header, ...)</documentation>
+						</annotation></element>
+				</sequence>
+				<attribute name="type" type="int" use="required">
+					<annotation>
+						<documentation>1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown</documentation></annotation></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="SubTypeWeightType">
+		<complexContent>
+			<extension base="ev:WeightType">
+				<sequence>
+					<element name="RegionTypeWeight" type="ev:RegionTypeWeightType" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>weights per region type (text, image, ...)</documentation></annotation></element>
+				</sequence>
+				<attribute name="subtype" type="string" use="required">
+					<annotation>
+						<documentation>text region type (paragraph, ...)</documentation>
+					</annotation></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParametersType">
+		<sequence>
+			<element name="Parameter" type="ev:ParameterType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ParameterType">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="1"></element>
+			<element name="ValidValues" type="ev:ValidValuesType" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>possible values for textType 'list'</documentation>
+				</annotation></element>
+		</sequence>
+		<attribute name="name" type="string" use="optional"></attribute>
+		<attribute name="id" type="int" use="optional"></attribute>
+		<attribute name="type" type="int" use="required">
+			<annotation>
+				<documentation>1=float; 2=bool; 3=int; 4=string, 5=multi</documentation>
+			</annotation></attribute>
+		<attribute name="sortIndex" type="int" use="optional"></attribute>
+		<attribute name="readOnly" type="boolean" use="optional">
+			<annotation>
+				<documentation>hint for GUI</documentation>
+			</annotation></attribute>
+		<attribute name="isSet" type="boolean" use="optional"></attribute>
+		<attribute name="version" type="int" use="optional"></attribute>
+		<attribute name="visible" type="boolean" use="optional">
+			<annotation>
+				<documentation>hint for GUI</documentation>
+			</annotation></attribute>
+		<attribute name="value" type="string" use="optional"></attribute>
+		<attribute name="min" type="string" use="optional">
+			<annotation>
+				<documentation>for int and float</documentation>
+			</annotation></attribute>
+		<attribute name="max" type="string" use="optional">
+			<annotation>
+				<documentation>for int and float</documentation></annotation></attribute>
+		<attribute name="step" type="string" use="optional">
+			<annotation>
+				<documentation>for int and float; hint for GUI</documentation>
+			</annotation></attribute>
+		<attribute name="textType" type="int" use="optional">
+			<annotation>
+				<documentation>0=multiline; 1=singleline; 2=list  (hint for GUI)</documentation>
+			</annotation></attribute>
+	</complexType>
+
+	<complexType name="ValidValuesType">
+		<sequence>
+			<element name="Value" type="ev:ValueType" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ValueType">
+		<attribute name="value" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="EvalDataType">
+		<sequence>
+			<element name="Results" type="ev:ResultsType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Results (raw data + metrics) per region level (block, text line, word or glyph)</documentation>
+				</annotation></element>
+		</sequence>
+	
+		<attribute name="groundTruthFilename" type="string" use="required">
+			<annotation>
+				<documentation>no path, filename only</documentation>
+			</annotation></attribute>
+		<attribute name="segmentationResultFilename" type="string" use="required">
+			<annotation>
+				<documentation>no path, filename only</documentation></annotation></attribute>
+		<attribute name="imageFilename" type="string" use="required">
+			<annotation>
+				<documentation>black-and-white image; no path, filename only</documentation>
+			</annotation></attribute>
+		<attribute name="imageWidth" type="int" use="required"></attribute>
+		<attribute name="imageHeight" type="int" use="required"></attribute>
+	</complexType>
+    
+    <complexType name="ResultsType">
+		<sequence>
+			<element name="RawData" type="ev:RawDataType" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>overlaps, errors (merge, split, ...), ...</documentation>
+				</annotation></element>
+			<element name="Metrics" type="ev:MetricsType" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Success and error rates, statistics, ...</documentation>
+				</annotation></element>
+		</sequence>
+		<attribute name="type" type="int" use="required">
+			<annotation>
+				<documentation>region level (1=block, 2=text line, 3=word, 4=glyph)</documentation>
+			</annotation></attribute>
+	</complexType>
+    
+    <complexType name="RawDataType">
+		<sequence>
+			<element name="GroundTruthOverlap" type="ev:OverlapType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Segmentation result regions that a ground-truth region overlaps</documentation>
+				</annotation></element>
+			<element name="SegResultOverlap" type="ev:OverlapType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Ground-truth regions that a segmentation result region overlaps</documentation>
+				</annotation></element>
+			<element name="RegionResults" type="ev:RegionResultsType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Merge, split, miss, partial miss, misclassification, false detection</documentation>
+				</annotation></element>
+			<element name="ReadingOrderResults" type="ev:ReadingOrderResultsType" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>Reading order errors</documentation>
+				</annotation></element>
+		</sequence>
+	</complexType>
+
+    <complexType name="OverlapType">
+		<sequence>
+			<element name="OverlapsRegion" type="ev:RegionType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="regionId" type="string" use="required"></attribute>
+	</complexType>
+
+    <complexType name="RegionType">
+		<attribute name="id" type="string" use="required"></attribute>
+	</complexType>
+
+    <complexType name="RegionResultsType">
+        <choice minOccurs="0" maxOccurs="unbounded">
+        	<element name="RegionError" type="ev:RegionErrorType">
+        		<annotation>
+        			<documentation>miss, partial miss or false detection</documentation>
+        		</annotation></element>
+        	<element name="RegionErrorMerge" type="ev:RegionErrorMergeType"></element>
+        	<element name="RegionErrorSplit" type="ev:RegionErrorSplitType"></element>
+        	<element name="RegionErrorMisclass" type="ev:RegionErrorMisclassType"></element>
+        </choice>
+		<attribute name="regionId" type="string" use="required"></attribute>
+	</complexType>
+
+    <complexType name="RegionErrorType">
+		<sequence>
+			<element name="ErrorRects" type="ev:RectsType" minOccurs="0" maxOccurs="unbounded"></element>
+			<element name="FalseAlarmRects" type="ev:RectsType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="type" type="int" use="required">
+			<annotation>
+				<documentation>1=split; 2=merge; 3=miss; 4=partial miss; 5=misclassification; 6=false detection</documentation>
+			</annotation></attribute>
+		<attribute name="weightedAreaError" type="float" use="optional"></attribute>
+		<attribute name="weightedCountError" type="float" use="optional"></attribute>
+		<attribute name="area" type="int" use="optional"></attribute>
+		<attribute name="foregroundPixelCount" type="int" use="optional"></attribute>
+		<attribute name="count" type="int" use="optional"></attribute>
+		<attribute name="falseAlarm" type="boolean" use="optional"></attribute>
+	</complexType>
+
+    <complexType name="RegionErrorMergeType">
+		<complexContent>
+			<extension base="ev:RegionErrorType">
+				<sequence>
+					<element name="Merge" type="ev:MergeType" minOccurs="1" maxOccurs="unbounded"></element>
+					<element name="AllowableEntry" type="ev:AllowableEntryType" minOccurs="1" maxOccurs="unbounded"></element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+    <complexType name="RegionErrorSplitType">
+		<complexContent>
+			<extension base="ev:RegionErrorType">
+				<sequence>
+					<element name="Overlap" type="ev:OverlapRectsType" minOccurs="1" maxOccurs="unbounded"></element>
+				</sequence>
+				<attribute name="allowable" type="boolean" use="required"></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+    <complexType name="RegionErrorMisclassType">
+		<complexContent>
+			<extension base="ev:RegionErrorType">
+				<sequence>
+					<element name="Overlap" type="ev:OverlapRectsType" minOccurs="1" maxOccurs="unbounded"></element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+    <complexType name="MergeType">
+		<sequence>
+			<element name="Overlap" type="ev:OverlapRectsType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="regionId" type="string" use="required"></attribute>
+	</complexType>
+
+    <complexType name="OverlapRectsType">
+		<sequence>
+			<element name="Rect" type="ev:RectType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="regionId" type="string" use="required"></attribute>
+		<attribute name="area" type="int" use="optional"></attribute>
+		<attribute name="foregroundPixelCount" type="int" use="optional"></attribute>
+	</complexType>
+
+    <complexType name="AllowableEntryType">
+		<attribute name="regionId" type="string" use="required"></attribute>
+		<attribute name="allowable" type="boolean" use="required"></attribute>
+	</complexType>
+
+    <complexType name="RectsType">
+		<sequence>
+			<element name="Rect" type="ev:RectType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+    <complexType name="RectType">
+		<attribute name="left" type="int" use="required"></attribute>
+		<attribute name="top" type="int" use="required"></attribute>
+		<attribute name="right" type="int" use="required"></attribute>
+		<attribute name="bottom" type="int" use="required"></attribute>
+	</complexType>
+
+    <complexType name="ReadingOrderResultsType">
+		<sequence>
+			<element name="ReadingOrderError" type="ev:ReadingOrderErrorType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+    <complexType name="ReadingOrderErrorType">
+		<sequence>
+			<element name="SegResultRelation" type="ev:ReadingOrderRelationSetType" minOccurs="1" maxOccurs="1"></element>
+			<element name="GroundTruthRelation" type="ev:FuzzyReadingOrderRelationSetType" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="regionId1" type="string" use="required"></attribute>
+		<attribute name="regionId2" type="string" use="required"></attribute>
+		<attribute name="penalty" type="float" use="required"></attribute>
+	</complexType>
+
+    <complexType name="ReadingOrderRelationSetType">
+		<sequence>
+			<element name="Relation" type="ev:ReadingOrderRelationType" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+    <complexType name="FuzzyReadingOrderRelationSetType">
+		<sequence>
+			<element name="Relation" type="ev:ReadingOrderRelationType" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="penalty" type="float" use="required"></attribute>
+		<attribute name="weight" type="float" use="required"></attribute>
+		<attribute name="regionId1" type="string" use="required"></attribute>
+		<attribute name="regionId2" type="string" use="required"></attribute>
+		<attribute name="groundTruthRelation" type="int" use="required"></attribute>
+		<attribute name="segResultRelation" type="int" use="required"></attribute>
+	</complexType>
+
+    <complexType name="ReadingOrderRelationType">
+		<attribute name="type" type="int" use="required">
+			<annotation>
+				<documentation>1=predecessor; 2=successor; 3=undordered; 4=unknown; 5=unrelated; 6=not defined; 7=before; 8=after</documentation>
+			</annotation></attribute>
+	</complexType>
+
+    <complexType name="MetricsType">
+ 		<sequence>
+			<element name="NumberOfGroundTruthRegions" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Number of groud-truth regions per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="NumberOfSegResultRegions" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Number of segmentation result regions per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="GroundTruthRegionArea" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total ground-truth region area per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="GroundTruthRegionPixelCount" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total ground-truth region foreground pixel count per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="SegResultRegionArea" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total segmentation result region area per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="SegResultRegionPixelCount" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total segmentation result region foreground pixel count per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="RecallArea" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Recall area per region type (strict) (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="RecallPixelCount" type="ev:IntPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Recall foreground pixel count per region type (strict) (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="OverallWeightedAreaErrorPerErrorType" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total weighted area error per error type (1=split; 2=merge; 3=miss; 4=partial miss; 5=misclassification; 6=false detection)</documentation>
+				</annotation></element>
+			<element name="OverallWeightedAreaErrorPerRegionType" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total weighted area error per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="WeightedAreaSuccessRate" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Success rate based on weighted area error (per error type: 1=split; 2=merge; 3=miss; 4=partial miss; 5=misclassification; 6=false detection)</documentation>
+				</annotation></element>
+			<element name="OverallWeightedCountErrorPerErrorType" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total weighted count error per error type (1=split; 2=merge; 3=miss; 4=partial miss; 5=misclassification; 6=false detection)</documentation>
+				</annotation></element>
+			<element name="OverallWeightedCountErrorPerRegionType" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Total weighted count error per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="WeightedCountSuccessRate" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Success rate based on weighted count error (per error type: 1=split; 2=merge; 3=miss; 4=partial miss; 5=misclassification; 6=false detection)</documentation>
+				</annotation></element>
+			<element name="ErrorRateBasedOnSimpleCount" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>per error type</documentation>
+				</annotation></element>
+			<element name="Recall" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Recall per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+			<element name="Precision" type="ev:FloatPerTypeType" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Precision per region type (1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown)</documentation>
+				</annotation></element>
+		</sequence>
+    
+		<attribute name="type" type="int" use="optional">
+			<annotation>
+				<documentation>Region type (if not defined, the metrics are for all types)
+1=text; 2=image; 4=graphic; 8=lineart; 16=chart; 32=separator; 64=table; 128=maths; 256=frame; 512=noise; 1024=unknown</documentation>
+			</annotation></attribute>
+		<attribute name="numberOfGroundTruthRegions" type="int" use="required">
+			<annotation>
+				<documentation>Total number of regions (of the given type) within the ground-truth</documentation>
+			</annotation></attribute>
+		<attribute name="numberOfSegResultRegions" type="int" use="required">
+			<annotation>
+				<documentation>Total number of regions (of the given type) within the segmentation result</documentation>
+			</annotation></attribute>
+		<attribute name="imageArea" type="int" use="required"></attribute>
+		<attribute name="foregroundPixelCount" type="int" use="optional">
+			<annotation>
+				<documentation>Number of black pixels within the black-and-white image</documentation>
+			</annotation></attribute>
+		<attribute name="overallGroundTruthRegionArea" type="int" use="required">
+			<annotation>
+				<documentation>Combined area of all ground-truth regions (of the specified type)</documentation>
+			</annotation></attribute>
+		<attribute name="overallGroundTruthRegionPixelCount" type="int" use="optional">
+			<annotation>
+				<documentation>Combined numbr of black pixels in all ground-truth regions (of the specified type)</documentation>
+			</annotation></attribute>
+		<attribute name="overallSegResultRegionArea" type="int" use="required">
+			<annotation>
+				<documentation>Combined area of all segmentation result regions (of the specified type)</documentation>
+			</annotation></attribute>
+		<attribute name="overallSegResultRegionPixelCount" type="int" use="optional">
+			<annotation>
+				<documentation>Combined numbr of black pixels in all segmentation result regions (of the specified type)</documentation>
+			</annotation></attribute>
+		<attribute name="overallWeightedAreaError" type="float" use="required">
+			<annotation>
+				<documentation>Total weighted area error</documentation>
+			</annotation></attribute>
+		<attribute name="overallWeightedCountError" type="float" use="required">
+			<annotation>
+				<documentation>Total weighted count error</documentation>
+			</annotation></attribute>
+		<attribute name="readingOrderError" type="float" use="optional">
+			<annotation>
+				<documentation>total reading order error</documentation>
+			</annotation></attribute>
+		<attribute name="readingOrderSuccessRate" type="float" use="optional">
+			<annotation>
+				<documentation>reading order success rate (0..1)</documentation>
+			</annotation></attribute>
+		<attribute name="overallWeightedAreaSuccessRate" type="float" use="required">
+			<annotation>
+				<documentation>arithmetic mean of all success rates per error type (merge, split, ...)</documentation>
+			</annotation></attribute>
+		<attribute name="overallWeightedCountSuccessRate" type="float" use="required">
+			<annotation>
+				<documentation>arithmetic mean of all success rates per error type (merge, split, ...)</documentation></annotation></attribute>
+		<attribute name="harmonicWeightedAreaSuccessRate" type="float" use="required">
+			<annotation>
+				<documentation>harmonic mean of all success rates per error type (merge, split, ...)</documentation>
+			</annotation></attribute>
+		<attribute name="harmonicWeightedCountSuccessRate" type="float" use="required">
+			<annotation>
+				<documentation>harmonic mean of all success rates per error type (merge, split, ...)</documentation></annotation></attribute>
+		<attribute name="errorRateBasedOnSimpleCount" type="float" use="optional">
+			<annotation>
+				<documentation>arithmetic mean of all success rates per error type (merge, split, ...)</documentation>
+			</annotation></attribute>
+		<attribute name="recallNonStrict" type="float" use="required">
+			<annotation>
+				<documentation>recall rate without region classification (type doesn't matter) (0..1)</documentation>
+			</annotation></attribute>
+		<attribute name="recallStrict" type="float" use="required">
+			<annotation>
+				<documentation>recall rate with region classification (type doest matter) (0..1)</documentation>
+			</annotation></attribute>
+		<attribute name="precisionNonStrict" type="float" use="required">
+			<annotation>
+				<documentation>precision rate without region classification (type doesn't matter) (0..1)</documentation>
+			</annotation></attribute>
+		<attribute name="precisionStrict" type="float" use="required">
+			<annotation>
+				<documentation>precision rate with region classification (type does matter) (0..1)</documentation>
+			</annotation></attribute>
+		<attribute name="fMeasureStrict" type="float" use="required">
+			<annotation>
+				<documentation>F-Measure (for recall/precision)</documentation>
+			</annotation></attribute>
+		<attribute name="fMeasureNonStrict" type="float" use="required">
+			<annotation>
+				<documentation>F-Measure (for recall/precision)</documentation></annotation></attribute>
+	</complexType>
+
+    <complexType name="IntPerTypeType">
+		<attribute name="type" type="int" use="required"></attribute>
+		<attribute name="value" type="int" use="required"></attribute>
+	</complexType>
+
+    <complexType name="FloatPerTypeType">
+		<attribute name="type" type="int" use="required"></attribute>
+		<attribute name="value" type="float" use="required"></attribute>
+	</complexType>
+    
+</schema>
